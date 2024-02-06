@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .task-input {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .task-input input[type="text"],
+        .task-input input[type="text"]:nth-child(2) {
+            flex: 1;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .task-input button {
+            padding: 5px 10px;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .task-list li button {
+            margin-left: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Task Manager</h1>
+
+    <div class="task-input">
+        <input type="text" id="taskNameInput" placeholder="Enter task name">
+        <input type="text" id="taskDescriptionInput" placeholder="Enter task description">
+        <button onclick="createTask()">Add Task</button>
+    </div>
+
+    <ul class="task-list" id="taskList">
+        <!-- Tasks will be dynamically added here -->
+    </ul>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Fetch tasks on page load
+        $(document).ready(function () {
+            fetchTasks();
+        });
+
+        // Adjusted to use the AJAX functionality
+        function createTask() {
+            var nameInput = $('#taskNameInput').val().trim();
+            var descriptionInput = $('#taskDescriptionInput').val().trim();
+            if (nameInput !== "" && descriptionInput !== "") {
+                // Call the AJAX function to create a task
+                $.ajax({
+                    url: '/api/tasks',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ name: nameInput, description: descriptionInput }),
+                    success: function (response) {
+                        fetchTasks(); // Refresh the task list
+                        $('#taskNameInput').val(''); // Clear the input after successful addition
+                        $('#taskDescriptionInput').val(''); // Clear the input after successful addition
+                    },
+                    error: function (error) {
+                        console.error('Error creating task:', error);
+                    }
+                });
+            }
+        }
+
+        // Function to fetch tasks from the backend
+        function fetchTasks() {
+            $.ajax({
+                url: '/api/tasks',
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    displayTasks(response.tasks);
+                },
+                error: function (error) {
+                    console.error('Error fetching tasks:', error);
+                }
+            });
+        }
+
+        // Function to display tasks on the frontend
+        function displayTasks(tasks) {
+            $('#taskList').empty();
+            tasks.forEach(function (task) {
+                var taskItem = $('<li>').text(task.name + ": " + task.description);
+                var deleteButton = $('<button>').text('Delete').click(function () {
+                    deleteTask(task.id);
+                });
+                taskItem.append(deleteButton);
+                $('#taskList').append(taskItem);
+            });
+        }
+
+        // Function to delete a task
+        function deleteTask(taskId) {
+            $.ajax({
+                url: '/api/tasks',
+                method: 'DELETE',
+                data: { id: taskId },
+                success: function (response) {
+                    fetchTasks(); // Refresh the task list upon successful deletion
+                },
+                error: function (error) {
+                    console.error('Error deleting task:', error);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

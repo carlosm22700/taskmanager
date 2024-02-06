@@ -1,0 +1,31 @@
+# Eclipse Dynamic Web Project with Apache Tomcat
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# VS Code
+.vscode/
+node_modules/
+*.log
+.DS_Store
+
+# Maven (if using)
+target/
+
+# Apache Tomcat-related files
+.metadata/
+.settings/
+.wst/
+org.eclipse.wst.server.core/
+*.launch
+*.json
+*.prefs
+*.properties
+
+# Eclipse-specific project files
+.classpath
+.project
+.settings/
