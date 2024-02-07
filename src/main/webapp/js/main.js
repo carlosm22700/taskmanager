@@ -1,7 +1,7 @@
 // Function to fetch tasks from the backend
 function fetchTasks() {
     $.ajax({
-        url: '/api/tasks', // Ensure this matches your servlet URL pattern
+        url: '/TaskManagerWebApp/api/tasks', // Ensure this matches your servlet URL pattern
         method: 'GET',
         dataType: 'json',
         success: function (response) {
@@ -31,7 +31,7 @@ function displayTasks(tasks) {
 // Function to create a new task
 function createTask(name, description) {
     $.ajax({
-        url: '/api/tasks', // Ensure this matches your servlet URL pattern
+        url: '/TaskManagerWebApp/api/tasks', // Ensure this matches your servlet URL pattern
         method: 'POST',
         contentType: 'application/json', // Set the content type to application/json
         data: JSON.stringify({ name: name, description: description }), // Send both name and description
@@ -48,7 +48,7 @@ function createTask(name, description) {
 // Function to delete a task
 function deleteTask(taskId) {
     $.ajax({
-        url: '/api/tasks', // Ensure this matches your servlet URL pattern
+        url: '/TaskManagerWebApp/api/tasks',
         method: 'DELETE',
         data: { id: taskId }, // Send the task ID as a query parameter
         success: function (response) {
