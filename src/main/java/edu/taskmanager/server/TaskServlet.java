@@ -88,7 +88,7 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        setAccessControlHeaders(response); // Necessary for CORS pre-flight requests
+        setAccessControlHeaders(response); // Set CORS headers
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
